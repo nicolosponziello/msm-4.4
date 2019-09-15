@@ -437,8 +437,13 @@ struct fg_wakeup_source {
 	unsigned long		enabled;
 };
 
+static int skip_awake_lc = true;
+
 static void fg_stay_awake(struct fg_wakeup_source *source)
 {
+	if(skip_awake_lc)
+		return;
+
 	if (!__test_and_set_bit(0, &source->enabled)) {
 		__pm_stay_awake(&source->source);
 		pr_debug("enabled source %s\n", source->source.name);
@@ -2847,7 +2852,7 @@ wait:
 			goto wait;
 		} else if (ret <= 0) {
 			rc = -ETIMEDOUT;
-			pr_err("transaction timed out ret=%d\n", ret);
+			//pr_err("transaction timed out ret=%d\n", ret);
 			goto out;
 		}
 	}
@@ -2857,7 +2862,7 @@ wait:
 		fg_data[0].len, fg_data[0].offset,
 		chip->sw_rbias_ctrl ? 1 : 0);
 	if (rc) {
-		pr_err("Failed to update temp data\n");
+		//pr_err("Failed to update temp data\n");
 		goto out;
 	}
 
@@ -4083,6 +4088,11 @@ static void status_change_work(struct work_struct *work)
 		fg_stay_awake(&chip->esr_extract_wakeup_source);
 		schedule_work(&chip->esr_extract_config_work);
 	}
+
+	if (chip->status == POWER_SUPPLY_STATUS_CHARGING)
+		skip_awake_lc = false;
+	else
+		skip_awake_lc = true;
 
 	if (chip->status == POWER_SUPPLY_STATUS_FULL) {
 		if (capacity >= 99 && chip->hold_soc_while_full
