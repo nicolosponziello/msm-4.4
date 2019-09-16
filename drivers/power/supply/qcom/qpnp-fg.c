@@ -2676,7 +2676,7 @@ static void check_sanity_work(struct work_struct *work)
 	rc = read_beat(chip, &beat_count);
 	if (rc == 0 && chip->last_beat_count != beat_count) {
 		chip->last_beat_count = beat_count;
-		schedule_delayed_work(
+		queue_delayed_work(system_power_efficient_wq,
 			&chip->check_sanity_work,
 			msecs_to_jiffies(SANITY_CHECK_PERIOD_MS));
 		return;
@@ -2704,7 +2704,7 @@ try_again:
 		chip->last_beat_count = beat_count;
 	}
 resched:
-	schedule_delayed_work(
+	queue_delayed_work(system_power_efficient_wq,
 		&chip->check_sanity_work,
 		msecs_to_jiffies(SANITY_CHECK_PERIOD_MS));
 out:
@@ -2862,7 +2862,7 @@ out:
 	fg_relax(&chip->update_temp_wakeup_source);
 
 resched:
-	schedule_delayed_work(
+	queue_delayed_work(system_power_efficient_wq,
 		&chip->update_temp_work,
 		msecs_to_jiffies(TEMP_PERIOD_UPDATE_MS));
 }
