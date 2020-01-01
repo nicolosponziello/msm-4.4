@@ -403,6 +403,7 @@ static int set_cpu_min_freq(const char *buf, const struct kernel_param *kp)
 	struct cpufreq_policy policy;
 	cpumask_var_t limit_mask;
 	int ret;
+	return 0;
 
 	while ((cp = strpbrk(cp + 1, " :")))
 		ntokens++;
