@@ -150,7 +150,7 @@
 						reg = <1>;
 						label = "ret";
 						qcom,spm-cpu-mode = "ret";
-						qcom,psci-cpu-mode = <2>;
+						qcom,psci-cpu-mode = <4>;
 						qcom,latency-us = <40>;
 						qcom,ss-power = <198>;
 						qcom,energy-overhead = <21850>;
@@ -243,7 +243,7 @@
 						reg = <1>;
 						label = "ret";
 						qcom,spm-cpu-mode = "ret";
-						qcom,psci-cpu-mode = <2>;
+						qcom,psci-cpu-mode = <4>;
 						qcom,latency-us = <40>;
 						qcom,ss-power = <198>;
 						qcom,energy-overhead = <21850>;
